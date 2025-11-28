@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Book of Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Caveat:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --parchment: #faf9f6;
+            --page-white: #fffffe;
+            --ink: #1a1a2e;
+            --ink-light: #4a5568;
+            --line-color: #e2e8f0;
+            --accent: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--parchment);
+            background-image: 
+                radial-gradient(ellipse at top, rgba(255,255,255,0.8) 0%, transparent 50%);
+            color: var(--ink);
+            font-family: 'Libre Baskerville', Georgia, serif;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 { font-family: 'Cinzel', serif; font-weight: 400; }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        nav {
+            padding: 3rem 0;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+        }
+
+        nav h1 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            letter-spacing: 0.25em;
+            color: var(--ink);
+            font-weight: 400;
+        }
+
+        nav h1 span {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 0.7em;
+            color: var(--accent);
+            margin: 0 0.5em;
+            letter-spacing: 0;
+        }
+
+        .intro {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem 1.5rem 6rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.4s forwards;
+        }
+
+        .section-label {
+            display: block;
+            font-family: system-ui, sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .intro p {
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            color: var(--ink-light);
+            font-weight: 400;
+            line-height: 1.9;
+        }
+
+        .intro p em {
+            display: block;
+            margin-top: 1.5rem;
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .book-section {
+            padding: 2rem 0 4rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .book-wrapper {
+            perspective: 2000px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .book {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr;
+            background: var(--page-white);
+            border-radius: 4px;
+            transform-style: preserve-3d;
+            transform: rotateX(2deg);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.02),
+                0 4px 8px rgba(0,0,0,0.02),
+                0 8px 16px rgba(0,0,0,0.03),
+                0 16px 32px rgba(0,0,0,0.04),
+                0 32px 64px rgba(0,0,0,0.06),
+                inset 2px 0 4px rgba(0,0,0,0.02),
+                inset -2px 0 4px rgba(0,0,0,0.02);
+        }
+
+        .book:hover {
+            transform: rotateX(0deg) translateY(-4px);
+        }
+
+        .book::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            right: -3px;
+            width: 6px;
+            background: linear-gradient(to right,
+                #f5f5f5 0%,
+                #e8e8e8 50%,
+                #f0f0f0 100%
+            );
+            border-radius: 0 2px 2px 0;
+            box-shadow: 1px 0 2px rgba(0,0,0,0.05);
+        }
+
+        .book::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: -3px;
+            width: 6px;
+            background: linear-gradient(to left,
+                #f5f5f5 0%,
+                #e8e8e8 50%,
+                #f0f0f0 100%
+            );
+            border-radius: 2px 0 0 2px;
+            box-shadow: -1px 0 2px rgba(0,0,0,0.05);
+        }
+
+        .spine {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            transform: translateX(-50%);
+            background: linear-gradient(to right,
+                transparent 0%,
+                rgba(0,0,0,0.03) 20%,
+                rgba(0,0,0,0.06) 50%,
+                rgba(0,0,0,0.03) 80%,
+                transparent 100%
+            );
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .page {
+            padding: 2.5rem;
+            min-height: 350px;
+            position: relative;
+            background: 
+                linear-gradient(to bottom, var(--line-color) 1px, transparent 1px);
+            background-size: 100% 2.2rem;
+            background-position: 0 2.5rem;
+        }
+
+        .page-question {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.6rem, 4vw, 2rem);
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 2.2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .page-answer {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            font-weight: 400;
+            color: #2d3748;
+            line-height: 2.2rem;
+            white-space: pre-line;
+        }
+
+        .page-author {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-top: 1.5rem;
+        }
+
+        .book-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .next-story {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 0.95rem;
+            color: var(--ink);
+            background: transparent;
+            border: 1px solid var(--line-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-story:hover {
+            border-color: var(--ink);
+            background: var(--page-white);
+        }
+
+        .next-story svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .next-story:hover svg {
+            transform: translateX(4px);
+        }
+
+        .pen-quote {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .page::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, 
+                var(--page-white) 50%, 
+                #f0f0f0 50%,
+                #e8e8e8 60%,
+                #f5f5f5 100%
+            );
+            box-shadow: -2px -2px 4px rgba(0,0,0,0.03);
+            border-radius: 0 0 4px 0;
+        }
+
+        @media (min-width: 768px) {
+            .book {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .spine {
+                display: block;
+            }
+
+            .page {
+                padding: 3.5rem 4rem;
+                min-height: 450px;
+            }
+
+            .page:first-child {
+                border-right: 1px solid rgba(0,0,0,0.04);
+            }
+
+            .page:first-child::after {
+                display: none;
+            }
+        }
+
+        .purpose {
+            max-width: 580px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem 1.5rem 3rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.8s forwards;
+        }
+
+        .purpose p {
+            font-size: 1.1rem;
+            color: var(--ink-light);
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            color: var(--ink);
+            text-decoration: none;
+            padding: 0.75rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--ink);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .cta:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .cta svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .cta:hover svg {
+            transform: translateX(4px);
+        }
+
+        footer {
+            padding: 2rem 1.5rem 3rem;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 1s forwards;
+        }
+
+        .footer-flourish {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: var(--accent);
+            opacity: 0.4;
+            margin-bottom: 1.5rem;
+        }
+
+        footer nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            padding: 0;
+            opacity: 1;
+            animation: none;
+        }
+
+        footer nav a {
+            font-family: system-ui, sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer nav a:hover {
+            color: var(--ink);
+        }
+
+        .copyright {
+            font-family: system-ui, sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #cbd5e1;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1>THE BOOK <span>of</span> EXPERIENCE</h1>
+    </nav>
+
+    <main>
+        <section class="intro">
+            <span class="section-label">Introduction</span>
+            <p>
+                A collaborative archive of human moments.
+                Here, we collect the lessons learned and the fears faced.
+            </p>
+        </section>
+
+        <section class="book-section">
+            <div class="container">
+                <div class="book-wrapper">
+                    <article class="book">
+                        <div class="spine"></div>
+                        
+                        <div class="page">
+                            <h2 class="page-question">What is the best experience you would gift someone?</h2>
+                            <p class="page-answer">A sunrise on a quiet mountain.
+Phones off, no rush, just warmth, coffee,
+and the feeling that life is bigger than our worries.
+The kind of morning where time slows down
+and you remember why you're alive.
+I'd gift that stillness to anyone who's forgotten
+what peace feels like.</p>
+                            <p class="page-author">— Maria, 2024</p>
+                        </div>
+
+                        <div class="page">
+                            <h2 class="page-question">What is your biggest fear?</h2>
+                            <p class="page-answer">Reaching the end of my life
+and realizing I never truly showed up —
+for myself or the people I love.
+That I played it safe when I should have leaped.
+That I kept waiting for the right moment
+instead of making the moment right.
+The fear isn't death. It's an unlived life.</p>
+                            <p class="page-author">— James, 2023</p>
+                        </div>
+                    </article>
+                    
+                    <div class="book-nav">
+                        <button class="next-story">
+                            Next Story
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="purpose">
+            <span class="section-label">The Purpose</span>
+            <p>
+                We believe shared experiences are our most valuable currency. 
+                By documenting our highs and lows, we create a map for others 
+                to navigate their own journeys.
+            </p>
+            
+            <p class="pen-quote">Pick up the pen when you are ready.</p>
+            
+            <a href="#" class="cta">
+                Share your story
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-flourish">fin.</div>
+        <nav>
+            <a href="#">Stories</a>
+            <a href="#">About</a>
+            <a href="#">Donate</a>
+        </nav>
+        <p class="copyright">&copy; 2025 The Book of Experience</p>
+    </footer>
+
+</body>
+</html>
