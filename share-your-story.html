@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Story | The Book of Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Caveat:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <!-- Success message overlay -->
+    <div id="success-overlay" class="success-overlay hidden">
+        <div class="success-message">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h2>Thank you for sharing</h2>
+            <p>Your story has been added to the book.</p>
+            <a href="stories.html" class="success-btn">Read Stories</a>
+        </div>
+    </div>
+
+    <main>
+        <section class="intro">
+            <span class="section-label">Your Turn</span>
+            <p>
+                Every story matters. Every experience shapes who we become.
+                Take a moment to reflect, and share what you've learned along the way.
+            </p>
+            <p><em>Your words may light the path for someone else.</em></p>
+        </section>
+
+        <section class="personal-info-section">
+            <div class="container">
+                <form id="story-form">
+                    <div class="standard-form">
+                        <div class="form-row-4">
+                            <div class="form-group-standard">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Your name" required>
+                            </div>
+
+                            <div class="form-group-standard">
+                                <label for="country">Country</label>
+                                <input type="text" id="country" name="country" placeholder="Your country" required>
+                            </div>
+
+                            <div class="form-group-standard">
+                                <label for="age">Age</label>
+                                <input type="number" id="age" name="age" placeholder="Age" min="1" max="120" required>
+                            </div>
+
+                            <div class="form-group-standard">
+                                <label for="sex">Sex</label>
+                                <select id="sex" name="sex" required>
+                                    <option value="" disabled selected>Select...</option>
+                                    <option value="female">Female</option>
+                                    <option value="male">Male</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer-not">Prefer not to say</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="book-section">
+                        <div class="book-wrapper">
+                            <div class="book book-single">
+                                <div class="question-page">
+                                    <h2>What is the best experience you would gift someone?</h2>
+                                    <div class="form-group">
+                                        <div class="textarea-wrapper">
+                                            <textarea id="experience" name="experience" placeholder="Share the moment, feeling, or lesson you'd want others to have..." required></textarea>
+                                        </div>
+                                        <span class="expand-hint">Drag corner to expand</span>
+                                    </div>
+
+                                    <h2>What is your biggest fear?</h2>
+                                    <div class="form-group">
+                                        <div class="textarea-wrapper">
+                                            <textarea id="fear" name="fear" placeholder="What keeps you up at night, or what have you learned to overcome..." required></textarea>
+                                        </div>
+                                        <span class="expand-hint">Drag corner to expand</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-section">
+                        <button type="submit" class="submit-btn">
+                            Submit Your Story
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="js/components.js"></script>
+    <script src="js/stories.js"></script>
+    <script>
+        document.getElementById('story-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                country: document.getElementById('country').value,
+                age: document.getElementById('age').value,
+                sex: document.getElementById('sex').value,
+                experience: document.getElementById('experience').value,
+                fear: document.getElementById('fear').value
+            };
+
+            try {
+                saveStory(formData);
+                document.getElementById('success-overlay').classList.remove('hidden');
+                this.reset();
+            } catch (error) {
+                console.error('Error saving story:', error);
+                alert('There was an error saving your story. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+</html>

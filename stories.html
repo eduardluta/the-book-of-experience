@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Book of Experience</title>
+    <title>Stories | The Book of Experience</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Caveat:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -15,26 +15,26 @@
 
     <main>
         <section class="intro">
-            <span class="section-label">Introduction</span>
+            <span class="section-label">The Collection</span>
             <p>
-                A collaborative archive of human moments.
-                Here, we collect the lessons learned and the fears faced.
+                Pages filled with human moments.
+                Each story a window into another soul's journey.
             </p>
         </section>
 
-        <section class="book-section">
+        <section class="book-section stories-book-section">
             <div class="container">
                 <div class="book-wrapper">
                     <article class="book" id="book">
                         <div class="spine"></div>
 
-                        <div class="page">
+                        <div class="page" id="page-left">
                             <h2 class="page-question">What is the best experience you would gift someone?</h2>
                             <p class="page-answer" id="experience-text"></p>
                             <p class="page-author" id="author-left"></p>
                         </div>
 
-                        <div class="page">
+                        <div class="page" id="page-right">
                             <h2 class="page-question">What is your biggest fear?</h2>
                             <p class="page-answer" id="fear-text"></p>
                             <p class="page-author" id="author-right"></p>
@@ -42,8 +42,17 @@
                     </article>
 
                     <div class="book-nav">
+                        <button class="nav-btn prev-story" id="prev-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            Previous
+                        </button>
+
+                        <span class="page-indicator" id="page-indicator">Story 1 of 1</span>
+
                         <button class="nav-btn next-story" id="next-btn">
-                            Next Story
+                            Next
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
@@ -54,17 +63,10 @@
         </section>
 
         <section class="purpose">
-            <span class="section-label">The Purpose</span>
-            <p>
-                We believe shared experiences are our most valuable currency. 
-                By documenting our highs and lows, we create a map for others 
-                to navigate their own journeys.
-            </p>
-            
-            <p class="pen-quote">Pick up the pen when you are ready.</p>
-            
+            <p class="pen-quote">Every story adds a page to our shared experience.</p>
+
             <a href="share-your-story.html" class="cta">
-                Share your story
+                Add your story
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -88,29 +90,50 @@
 
             if (animate) {
                 book.classList.add('turning');
-                setTimeout(() => updateStoryContent(story, book), 300);
+                setTimeout(() => updateStoryContent(story, index, book), 300);
             } else {
-                updateStoryContent(story, book);
+                updateStoryContent(story, index, book);
             }
         }
 
-        function updateStoryContent(story, book) {
+        function updateStoryContent(story, index, book) {
             document.getElementById('experience-text').textContent = story.experience;
             document.getElementById('fear-text').textContent = story.fear;
             document.getElementById('author-left').textContent = formatAuthor(story);
             document.getElementById('author-right').textContent = formatAuthor(story);
+            document.getElementById('page-indicator').textContent = `Story ${index + 1} of ${stories.length}`;
+
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === stories.length - 1;
+
             book.classList.remove('turning');
         }
 
         function nextStory() {
-            currentIndex = (currentIndex + 1) % stories.length;
-            displayStory(currentIndex);
+            if (currentIndex < stories.length - 1) {
+                currentIndex++;
+                displayStory(currentIndex);
+            }
+        }
+
+        function prevStory() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayStory(currentIndex);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             stories = getStoriesWithDefault();
             displayStory(0, false);
+
             document.getElementById('next-btn').addEventListener('click', nextStory);
+            document.getElementById('prev-btn').addEventListener('click', prevStory);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') nextStory();
+                if (e.key === 'ArrowLeft') prevStory();
+            });
         });
     </script>
 

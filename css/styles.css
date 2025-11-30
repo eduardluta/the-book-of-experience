@@ -1,0 +1,892 @@
+:root {
+    --parchment: #faf9f6;
+    --page-white: #fffffe;
+    --ink: #1a1a2e;
+    --ink-light: #4a5568;
+    --line-color: #e2e8f0;
+    --accent: #64748b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--parchment);
+    background-image:
+        radial-gradient(ellipse at top, rgba(255,255,255,0.8) 0%, transparent 50%);
+    color: var(--ink);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    line-height: 1.7;
+    min-height: 100vh;
+}
+
+h1, h2, h3 { font-family: 'Cinzel', serif; font-weight: 400; }
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Header / Nav */
+.site-header {
+    padding: 3rem 0;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.2s forwards;
+}
+
+.site-header h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: 0.25em;
+    color: var(--ink);
+    font-weight: 400;
+}
+
+.site-header h1 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.site-header h1 span {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 0.7em;
+    color: var(--accent);
+    margin: 0 0.5em;
+    letter-spacing: 0;
+}
+
+/* Section labels */
+.section-label {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+}
+
+/* Intro section */
+.intro {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 4rem 1.5rem 6rem;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.4s forwards;
+}
+
+.intro p {
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    color: var(--ink-light);
+    font-weight: 400;
+    line-height: 1.9;
+}
+
+.intro p em {
+    display: block;
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: var(--accent);
+}
+
+/* Book styles */
+.book-section {
+    padding: 2rem 0 4rem;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.6s forwards;
+}
+
+.book-wrapper {
+    perspective: 2000px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.book {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--page-white);
+    border-radius: 4px;
+    transform-style: preserve-3d;
+    transform: rotateX(2deg);
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow:
+        0 2px 4px rgba(0,0,0,0.02),
+        0 4px 8px rgba(0,0,0,0.02),
+        0 8px 16px rgba(0,0,0,0.03),
+        0 16px 32px rgba(0,0,0,0.04),
+        0 32px 64px rgba(0,0,0,0.06),
+        inset 2px 0 4px rgba(0,0,0,0.02),
+        inset -2px 0 4px rgba(0,0,0,0.02);
+}
+
+.book:hover {
+    transform: rotateX(0deg) translateY(-4px);
+}
+
+.book::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    right: -3px;
+    width: 6px;
+    background: linear-gradient(to right,
+        #f5f5f5 0%,
+        #e8e8e8 50%,
+        #f0f0f0 100%
+    );
+    border-radius: 0 2px 2px 0;
+    box-shadow: 1px 0 2px rgba(0,0,0,0.05);
+}
+
+.book::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: -3px;
+    width: 6px;
+    background: linear-gradient(to left,
+        #f5f5f5 0%,
+        #e8e8e8 50%,
+        #f0f0f0 100%
+    );
+    border-radius: 2px 0 0 2px;
+    box-shadow: -1px 0 2px rgba(0,0,0,0.05);
+}
+
+.spine {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    transform: translateX(-50%);
+    background: linear-gradient(to right,
+        transparent 0%,
+        rgba(0,0,0,0.03) 20%,
+        rgba(0,0,0,0.06) 50%,
+        rgba(0,0,0,0.03) 80%,
+        transparent 100%
+    );
+    z-index: 10;
+    pointer-events: none;
+}
+
+.page {
+    padding: 2.5rem;
+    min-height: 350px;
+    position: relative;
+    background:
+        linear-gradient(to bottom, var(--line-color) 1px, transparent 1px);
+    background-size: 100% 2.2rem;
+    background-position: 0 2.5rem;
+}
+
+.page-question {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 2.2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.page-answer {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 400;
+    color: #2d3748;
+    line-height: 2.2rem;
+    white-space: pre-line;
+}
+
+.page-author {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-top: 1.5rem;
+}
+
+.book-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.next-story {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.next-story:hover {
+    border-color: var(--ink);
+    background: var(--page-white);
+}
+
+.next-story svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.next-story:hover svg {
+    transform: translateX(4px);
+}
+
+.pen-quote {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+}
+
+.page::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg,
+        var(--page-white) 50%,
+        #f0f0f0 50%,
+        #e8e8e8 60%,
+        #f5f5f5 100%
+    );
+    box-shadow: -2px -2px 4px rgba(0,0,0,0.03);
+    border-radius: 0 0 4px 0;
+}
+
+@media (min-width: 768px) {
+    .book {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .spine {
+        display: block;
+    }
+
+    .page {
+        padding: 3.5rem 4rem;
+        min-height: 450px;
+    }
+
+    .page:first-child {
+        border-right: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .page:first-child::after {
+        display: none;
+    }
+}
+
+/* Purpose section */
+.purpose {
+    max-width: 580px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 4rem 1.5rem 3rem;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.8s forwards;
+}
+
+.purpose p {
+    font-size: 1.1rem;
+    color: var(--ink-light);
+    line-height: 2;
+    margin-bottom: 2rem;
+}
+
+/* CTA link */
+.cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0.75rem 0;
+    position: relative;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.cta::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cta:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.cta svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.cta:hover svg {
+    transform: translateX(4px);
+}
+
+/* Footer */
+.site-footer {
+    padding: 2rem 1.5rem 3rem;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 1s forwards;
+}
+
+.footer-flourish {
+    font-family: 'Caveat', cursive;
+    font-size: 2rem;
+    color: var(--accent);
+    opacity: 0.4;
+    margin-bottom: 1.5rem;
+}
+
+.site-footer nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding: 0;
+    opacity: 1;
+    animation: none;
+}
+
+.site-footer nav a {
+    font-family: system-ui, sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.site-footer nav a:hover {
+    color: var(--ink);
+}
+
+.copyright {
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #cbd5e1;
+}
+
+/* Animations */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form styles for share page */
+.form-page {
+    padding: 2.5rem;
+    min-height: auto;
+    position: relative;
+    background:
+        linear-gradient(to bottom, var(--line-color) 1px, transparent 1px);
+    background-size: 100% 2.2rem;
+    background-position: 0 2.5rem;
+}
+
+.form-page::after {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 0;
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line-color);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-bottom-color: var(--ink);
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 250px;
+    line-height: 2.2rem;
+    position: relative;
+}
+
+/* Resize handle indicator */
+.form-group .textarea-wrapper {
+    position: relative;
+}
+
+.form-group .textarea-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    background:
+        linear-gradient(135deg, transparent 50%, var(--accent) 50%, var(--accent) 60%, transparent 60%),
+        linear-gradient(135deg, transparent 65%, var(--accent) 65%, var(--accent) 75%, transparent 75%),
+        linear-gradient(135deg, transparent 80%, var(--accent) 80%, var(--accent) 90%, transparent 90%);
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.form-group .textarea-wrapper:hover::after {
+    opacity: 0.8;
+}
+
+.form-group .expand-hint {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-align: right;
+    margin-top: 0.5rem;
+    opacity: 0.7;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 500px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+.question-page {
+    padding: 2.5rem;
+    position: relative;
+    background:
+        linear-gradient(to bottom, var(--line-color) 1px, transparent 1px);
+    background-size: 100% 2.2rem;
+    background-position: 0 2.5rem;
+}
+
+.question-page::after {
+    display: none;
+}
+
+.question-page h2 {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 2.2rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .form-page,
+    .question-page {
+        padding: 3.5rem 4rem;
+    }
+}
+
+.submit-section {
+    text-align: center;
+    padding: 2rem 0 0;
+}
+
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--page-white);
+    background: var(--ink);
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: var(--ink-light);
+    transform: translateY(-2px);
+}
+
+.submit-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Standard form fields (non-book style) */
+.personal-info-section {
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.6s forwards;
+}
+
+.personal-info-section .book-section {
+    padding-top: 0;
+    opacity: 1;
+    animation: none;
+}
+
+.standard-form {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
+
+.form-row-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .form-row-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .form-row-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group-standard {
+    margin-bottom: 1rem;
+}
+
+.form-group-standard label {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.form-group-standard input,
+.form-group-standard select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--page-white);
+    border: 1px solid var(--line-color);
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group-standard input:focus,
+.form-group-standard select:focus {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+}
+
+.form-group-standard select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+}
+
+.form-group-standard input::placeholder {
+    color: var(--accent);
+    opacity: 0.6;
+}
+
+/* Single page book design */
+.book-single {
+    grid-template-columns: 1fr !important;
+}
+
+.book-single .question-page {
+    padding: 3rem 3.5rem;
+}
+
+.book-single .question-page::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg,
+        var(--page-white) 50%,
+        #f0f0f0 50%,
+        #e8e8e8 60%,
+        #f5f5f5 100%
+    );
+    box-shadow: -2px -2px 4px rgba(0,0,0,0.03);
+    border-radius: 0 0 4px 0;
+}
+
+@media (min-width: 768px) {
+    .book-single .question-page {
+        padding: 3.5rem 5rem;
+    }
+}
+
+.personal-info-section .submit-section {
+    padding: 2rem 0 4rem;
+}
+
+/* Success overlay */
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(250, 249, 246, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.success-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.success-message {
+    text-align: center;
+    padding: 3rem;
+    animation: fadeUp 0.6s ease-out;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    background: var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-icon svg {
+    width: 40px;
+    height: 40px;
+    stroke: var(--page-white);
+}
+
+.success-message h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+}
+
+.success-message p {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1rem;
+    color: var(--ink-light);
+    margin-bottom: 2rem;
+}
+
+.success-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    color: var(--page-white);
+    background: var(--ink);
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.success-btn:hover {
+    background: var(--ink-light);
+    transform: translateY(-2px);
+}
+
+/* Stories page styles */
+.stories-book-section {
+    min-height: 500px;
+}
+
+/* Book navigation */
+.book-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+    border-color: var(--ink);
+    background: var(--page-white);
+}
+
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.nav-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.nav-btn.next-story:hover:not(:disabled) svg {
+    transform: translateX(4px);
+}
+
+.nav-btn.prev-story:hover:not(:disabled) svg {
+    transform: translateX(-4px);
+}
+
+.page-indicator {
+    font-family: system-ui, sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    min-width: 120px;
+    text-align: center;
+}
+
+/* Page turn animation */
+.book.turning {
+    animation: pageTurn 0.6s ease-in-out;
+}
+
+@keyframes pageTurn {
+    0% {
+        transform: rotateX(2deg);
+    }
+    50% {
+        transform: rotateX(2deg) rotateY(-5deg);
+        box-shadow:
+            0 2px 4px rgba(0,0,0,0.02),
+            0 4px 8px rgba(0,0,0,0.02),
+            0 8px 16px rgba(0,0,0,0.03),
+            0 16px 32px rgba(0,0,0,0.04),
+            0 32px 64px rgba(0,0,0,0.06),
+            15px 0 30px rgba(0,0,0,0.1);
+    }
+    100% {
+        transform: rotateX(2deg);
+    }
+}
+
+.book .page {
+    transition: opacity 0.3s ease;
+}
+
+.book.turning .page {
+    opacity: 0.7;
+}
