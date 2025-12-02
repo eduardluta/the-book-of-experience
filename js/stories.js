@@ -2,30 +2,67 @@
 
 const STORAGE_KEY = 'book-of-experience-stories';
 
-// Default story to show when no stories exist
-const DEFAULT_STORY = {
-    id: 0,
-    name: 'Maria',
-    country: 'Portugal',
-    age: 34,
-    sex: 'female',
-    experience: `A sunrise on a quiet mountain.
-Phones off, no rush, just warmth, coffee,
-and the feeling that life is bigger than our worries.
-The kind of morning where time slows down
-and you remember why you're alive.
-I'd gift that stillness to anyone who's forgotten
-what peace feels like.`,
-    fear: `Reaching the end of my life
-and realizing I never truly showed up —
-for myself or the people I love.
-That I played it safe when I should have leaped.
-That I kept waiting for the right moment
-instead of making the moment right.
-The fear isn't death. It's an unlived life.`,
-    createdAt: '2024-01-01T00:00:00.000Z',
-    isDefault: true
-};
+// Default stories to show when no user stories exist
+const DEFAULT_STORIES = [
+    {
+        id: 1,
+        name: 'Elena',
+        country: 'Italy',
+        age: 42,
+        sex: 'female',
+        experience: `The summer I learned to sail alone. No engine, no GPS, just the wind and my own judgment. Three weeks on the Mediterranean taught me that fear and freedom are the same door—you just have to choose which way to walk through it.`,
+        fear: `That I'll wake up at 80 and realize I spent my whole life preparing for a moment that never came. That safety was just another word for standing still.`,
+        createdAt: '2024-03-15T10:30:00.000Z',
+        isDefault: true
+    },
+    {
+        id: 2,
+        name: 'Marcus',
+        country: 'Canada',
+        age: 29,
+        sex: 'male',
+        experience: `Holding my daughter for the first time. In that moment, every selfish thing I'd ever done made sense—it was all just practice for learning how to love someone more than myself.`,
+        fear: `Not being there when she needs me most. Missing the moments that matter because I was chasing moments that don't.`,
+        createdAt: '2024-05-22T14:15:00.000Z',
+        isDefault: true
+    },
+    {
+        id: 3,
+        name: 'Yuki',
+        country: 'Japan',
+        age: 35,
+        sex: 'female',
+        experience: `Quitting my corporate job to become a ceramicist. Everyone said I was throwing away my future. But the first time I sold a piece I'd made with my own hands, I understood—I wasn't throwing anything away. I was finally picking myself up.`,
+        fear: `Conformity. Becoming so comfortable with other people's expectations that I forget I ever had my own dreams.`,
+        createdAt: '2024-02-08T09:45:00.000Z',
+        isDefault: true
+    },
+    {
+        id: 4,
+        name: 'Samuel',
+        country: 'Nigeria',
+        age: 56,
+        sex: 'male',
+        experience: `Forgiving my father on his deathbed. Thirty years of silence, and in the end, all it took was five words: "I understand now. Thank you." The weight I'd been carrying wasn't his to remove. It was mine to set down.`,
+        fear: `Passing down the same wounds I inherited. Breaking the cycle requires seeing it first, and some days I'm not sure I can see clearly enough.`,
+        createdAt: '2024-01-30T16:20:00.000Z',
+        isDefault: true
+    },
+    {
+        id: 5,
+        name: 'Astrid',
+        country: 'Norway',
+        age: 24,
+        sex: 'female',
+        experience: `Surviving a avalanche while hiking alone. For three hours under the snow, I had nothing but my breath and my thoughts. When they pulled me out, colors looked different. Food tasted different. I'd gift anyone that clarity—without the avalanche.`,
+        fear: `Wasting the second chance. Going back to sleep when I've finally woken up. Letting the ordinary make me forget how extraordinary it is to be alive.`,
+        createdAt: '2024-04-11T11:00:00.000Z',
+        isDefault: true
+    }
+];
+
+// For backwards compatibility
+const DEFAULT_STORY = DEFAULT_STORIES[0];
 
 /**
  * Get all stories from LocalStorage
@@ -44,13 +81,13 @@ function getStories() {
 }
 
 /**
- * Get all stories including default if no user stories exist
+ * Get all stories including defaults if no user stories exist
  * @returns {Array} Array of story objects
  */
 function getStoriesWithDefault() {
     const stories = getStories();
     if (stories.length === 0) {
-        return [DEFAULT_STORY];
+        return DEFAULT_STORIES;
     }
     return stories;
 }
